@@ -15,10 +15,18 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
-const allowedOrigin = process.env.CLIENT_URL || "http://localhost:5173";
+const devOrigin = "http://localhost:5173";
+const prodOrigin = process.env.CLIENT_URL;
+const allowedOrigins = [devOrigin];
+if (prodOrigin) allowedOrigins.push(prodOrigin);
 app.use(
   cors({
-    origin: allowedOrigin,
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps, curl, etc.)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );

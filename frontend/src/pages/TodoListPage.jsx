@@ -7,7 +7,7 @@ import axios from "axios";
 const API_URL =
   import.meta.env.MODE === "development"
     ? "http://localhost:4000/api/todo"
-    : "/api/todo";
+    : import.meta.env.VITE_API_URL + "/api/todo";
 
 const TodoListPage = () => {
   const [todos, setTodos] = useState([]);
