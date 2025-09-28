@@ -8,6 +8,7 @@ import DashboardPage from "./pages/DashboardPage";
 import TodoListPage from "./pages/TodoListPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import LandingPage from "./pages/LandingPage";
 
 import LoadingSpinner from "./components/LoadingSpinner";
 
@@ -38,7 +39,6 @@ const RedirectAuthenticatedUser = ({ children }) => {
   if (isAuthenticated && user.isVerified) {
     return <Navigate to="/" replace />;
   }
-
   return children;
 };
 
@@ -131,9 +131,15 @@ function App() {
           <Route
             path="/"
             element={
-              <ProtectedRoute>
-                <DashboardPage />
-              </ProtectedRoute>
+              // Show LandingPage for unauthenticated, Dashboard for authenticated
+              useAuthStore.getState().isAuthenticated &&
+              useAuthStore.getState().user?.isVerified ? (
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              ) : (
+                <LandingPage />
+              )
             }
           />
           <Route
