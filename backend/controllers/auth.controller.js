@@ -5,11 +5,12 @@ import { User } from "../models/user.model.js";
 import { generateVerificationCode } from "../utils/generateVerificationCode.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import {
-  sendPasswordResetEmail,
-  sendResetSuccessEmail,
-  sendVerificationEmail,
-  sendWelcomeEmail,
-} from "../mailtrap/email.js";
+  VERIFICATION_EMAIL_TEMPLATE,
+  PASSWORD_RESET_REQUEST_TEMPLATE,
+  PASSWORD_RESET_SUCCESS_TEMPLATE,
+  WELCOME_EMAIL_TEMPLATE,
+} from "../resend/emailTemplates.js";
+import { sendEmail } from "../resend/resendEmail.js";
 
 export const signup = async (req, res) => {
   const { email, password, name } = req.body;
@@ -40,10 +41,17 @@ export const signup = async (req, res) => {
 
     await user.save();
 
-    // jwt token generation will be here later
     generateTokenAndSetCookie(res, user._id);
 
-    sendVerificationEmail(user.email, verificationToken);
+    // Send verification email using Resend
+    await sendEmail({
+      to: user.email,
+      subject: "Verify your email",
+      html: VERIFICATION_EMAIL_TEMPLATE.replace(
+        "{verificationCode}",
+        verificationToken
+      ),
+    });
 
     res.status(201).json({
       success: true,
@@ -80,7 +88,12 @@ export const verifyEmail = async (req, res) => {
 
     await user.save();
 
-    await sendWelcomeEmail(user.email, user.name);
+    // Send welcome email using Resend and styled template
+    await sendEmail({
+      to: user.email,
+      subject: "Welcome to our app!",
+      html: WELCOME_EMAIL_TEMPLATE.replace("{name}", user.name),
+    });
 
     res.status(200).json({
       success: true,
@@ -164,11 +177,15 @@ export const forgotPassword = async (req, res) => {
 
     await user.save();
 
-    // send email with the reset link (you need to implement sendPasswordResetEmail)
-    await sendPasswordResetEmail(
-      user.email,
-      `${process.env.CLIENT_URL}/reset-password/${resetToken}`
-    );
+    // Send password reset email using Resend
+    await sendEmail({
+      to: user.email,
+      subject: "Reset your password",
+      html: PASSWORD_RESET_REQUEST_TEMPLATE.replace(
+        "{resetURL}",
+        `${process.env.CLIENT_URL}/reset-password/${resetToken}`
+      ),
+    });
 
     res.status(200).json({
       success: true,
@@ -205,7 +222,12 @@ export const resetPassword = async (req, res) => {
 
     await user.save();
 
-    sendResetSuccessEmail(user.email);
+    // Send password reset success email using Resend
+    await sendEmail({
+      to: user.email,
+      subject: "Password Reset Successful",
+      html: PASSWORD_RESET_SUCCESS_TEMPLATE,
+    });
 
     res
       .status(200)
