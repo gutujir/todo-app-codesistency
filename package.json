@@ -1,0 +1,30 @@
+{
+  "name": "mern-auth-codesistency",
+  "version": "1.0.0",
+  "main": "backend/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon backend/index.js",
+    "start": "NODE_ENV=production node backend/index.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mailtrap": "^4.2.0",
+    "mongoose": "^8.18.2",
+    "nodemailer": "^6.10.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
