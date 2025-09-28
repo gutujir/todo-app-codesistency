@@ -108,6 +108,42 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
+// Resend verification email controller
+export const resendVerification = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    if (user.isVerified) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email already verified" });
+    }
+    // Generate a new verification code and expiry
+    const verificationToken = generateVerificationCode();
+    user.verificationToken = verificationToken;
+    user.verificationTokenExpiresAt = Date.now() + 24 * 60 * 60 * 1000; // 1 day
+    await user.save();
+    await sendEmail({
+      to: user.email,
+      subject: "Verify your email",
+      html: VERIFICATION_EMAIL_TEMPLATE.replace(
+        "{verificationCode}",
+        verificationToken
+      ),
+    });
+    res
+      .status(200)
+      .json({ success: true, message: "Verification email resent" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
