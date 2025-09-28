@@ -40,8 +40,8 @@ app.use("/api/todo", todoRouter);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "frontend", "dist")));
 
-  // Express 5 requires '/*' instead of '*'
-  app.get("*", (req, res) => {
+  // Use app.use as the SPA fallback for Express 5
+  app.use((req, res) => {
     res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
   });
 }
