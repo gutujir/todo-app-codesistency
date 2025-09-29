@@ -139,7 +139,7 @@ This project is licensed under the MIT License.
 
 ## Author
 
-- [Your Name](https://github.com/gutujir)
+- [Gutu Jirata Imana](https://github.com/gutujir)
 
 ---
 
