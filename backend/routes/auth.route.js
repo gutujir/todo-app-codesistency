@@ -5,7 +5,7 @@ import {
   logout,
   signup,
   forgotPassword,
-  resetPassword,
+  resetPasswordByCode,
   checkAuth,
   resendVerification,
 } from "../controllers/auth.controller.js";
@@ -24,6 +24,6 @@ router.post("/logout", logout);
 router.post("/verify-email", verifyEmail);
 router.post("/resend-verification", resendVerification);
 router.post("/forgot-password", forgotPassword);
-router.post("/reset-password/:token", resetPassword);
+router.post("/reset-password-by-code", resetPasswordByCode);
 
 export default router;

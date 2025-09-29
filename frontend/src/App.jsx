@@ -10,6 +10,7 @@ import DashboardPage from "./pages/DashboardPage";
 import TodoListPage from "./pages/TodoListPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import EnterResetCodePage from "./pages/EnterResetCodePage";
 import LandingPage from "./pages/LandingPage";
 
 import LoadingSpinner from "./components/LoadingSpinner";
@@ -236,6 +237,14 @@ function App() {
             element={
               <RedirectAuthenticatedUser>
                 <ResetPasswordPage />
+              </RedirectAuthenticatedUser>
+            }
+          />
+          <Route
+            path="/enter-reset-code"
+            element={
+              <RedirectAuthenticatedUser>
+                <EnterResetCodePage />
               </RedirectAuthenticatedUser>
             }
           />

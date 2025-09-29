@@ -142,13 +142,11 @@ export const resendVerification = async (req, res) => {
         .json({ success: true, message: "Verification email resent" });
     } catch (emailError) {
       console.error("Resend API error:", emailError);
-      res
-        .status(500)
-        .json({
-          success: false,
-          message: "Failed to send verification email",
-          error: emailError.message || emailError,
-        });
+      res.status(500).json({
+        success: false,
+        message: "Failed to send verification email",
+        error: emailError.message || emailError,
+      });
     }
   } catch (error) {
     console.error("Resend verification controller error:", error);
@@ -205,39 +203,29 @@ export const logout = async (req, res) => {
 
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
-
   try {
     const user = await User.findOne({ email });
-
     if (!user) {
       return res.status(400).json({
         success: false,
         message: "User not found",
       });
     }
-
-    // Generate reset token and its expiry
-    const resetToken = crypto.randomBytes(20).toString("hex");
-    const resetTokenExpiresAt = Date.now() + 60 * 60 * 1000; // 1 hour
-
-    user.resetPasswordToken = resetToken;
-    user.resetPasswordExpiresAt = resetTokenExpiresAt;
-
+    // Generate a 6-digit numeric code and expiry
+    const resetCode = generateVerificationCode();
+    const resetCodeExpiresAt = Date.now() + 60 * 60 * 1000; // 1 hour
+    user.resetPasswordCode = resetCode;
+    user.resetPasswordCodeExpiresAt = resetCodeExpiresAt;
     await user.save();
-
-    // Send password reset email using Resend
+    // Send password reset code email using Resend
     await sendEmail({
       to: user.email,
       subject: "Reset your password",
-      html: PASSWORD_RESET_REQUEST_TEMPLATE.replace(
-        "{resetURL}",
-        `${process.env.CLIENT_URL}/reset-password/${resetToken}`
-      ),
+      html: PASSWORD_RESET_REQUEST_TEMPLATE.replace("{resetCode}", resetCode),
     });
-
     res.status(200).json({
       success: true,
-      message: "Password reset link sent to your email address successfully",
+      message: "Password reset code sent to your email address successfully",
     });
   } catch (error) {
     console.log("Error in forgotPassword:", error);
@@ -245,43 +233,35 @@ export const forgotPassword = async (req, res) => {
   }
 };
 
-export const resetPassword = async (req, res) => {
+export const resetPasswordByCode = async (req, res) => {
   try {
-    const { token } = req.params;
-    const { newPassword } = req.body;
-
+    const { email, code, newPassword } = req.body;
     const user = await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpiresAt: { $gt: Date.now() },
+      email,
+      resetPasswordCode: code,
+      resetPasswordCodeExpiresAt: { $gt: Date.now() },
     });
-
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: "Invalid or expired password reset token",
+        message: "Invalid or expired password reset code",
       });
     }
-
-    //  Hash the new password
     const hashedPassword = await bcryptjs.hash(newPassword, 10);
     user.password = hashedPassword;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpiresAt = undefined;
-
+    user.resetPasswordCode = undefined;
+    user.resetPasswordCodeExpiresAt = undefined;
     await user.save();
-
-    // Send password reset success email using Resend
     await sendEmail({
       to: user.email,
       subject: "Password Reset Successful",
       html: PASSWORD_RESET_SUCCESS_TEMPLATE,
     });
-
     res
       .status(200)
       .json({ success: true, message: "Password reset successfully" });
   } catch (error) {
-    console.log("Error in resetPassword:", error);
+    console.log("Error in resetPasswordByCode:", error);
     res.status(400).json({ success: false, message: error.message });
   }
 };
