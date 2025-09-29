@@ -1,3 +1,5 @@
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import FloatingShape from "./components/FloatingShape";
 
@@ -46,40 +48,97 @@ function Navbar() {
   const { isAuthenticated, user, logout } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
   if (!isAuthenticated || !user) return null;
   const handleLogout = async () => {
     await logout();
     navigate("/login");
   };
   return (
-    <nav className="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-90 shadow-lg z-50 flex items-center justify-between px-8 py-3">
-      <div className="flex items-center gap-6">
-        <Link
-          to="/"
-          className={`text-lg font-bold text-green-400 hover:text-green-300 transition-colors ${
-            location.pathname === "/" ? "underline" : ""
-          }`}
-        >
-          Dashboard
-        </Link>
-        <Link
-          to="/tasks"
-          className={`text-lg font-bold text-emerald-400 hover:text-emerald-300 transition-colors ${
-            location.pathname === "/tasks" ? "underline" : ""
-          }`}
-        >
-          My Tasks
-        </Link>
-      </div>
-      <div className="flex items-center gap-4">
-        <span className="text-gray-300 text-sm mr-2">{user.email}</span>
+    <nav className="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-90 shadow-lg z-50">
+      <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3 md:px-8">
+        {/* Logo/Brand */}
+        <div className="flex items-center gap-2">
+          <span className="text-2xl font-extrabold text-green-400 tracking-tight select-none">
+            TodoPro
+          </span>
+        </div>
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-8">
+          <Link
+            to="/"
+            className={`text-lg font-bold transition-colors px-2 py-1 rounded-lg ${
+              location.pathname === "/"
+                ? "bg-green-500 text-white"
+                : "text-green-400 hover:bg-green-600 hover:text-white"
+            }`}
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/tasks"
+            className={`text-lg font-bold transition-colors px-2 py-1 rounded-lg ${
+              location.pathname === "/tasks"
+                ? "bg-emerald-500 text-white"
+                : "text-emerald-400 hover:bg-emerald-600 hover:text-white"
+            }`}
+          >
+            My Tasks
+          </Link>
+          <span className="text-gray-300 text-sm ml-4">{user.email}</span>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow transition-colors"
+          >
+            Logout
+          </button>
+        </div>
+        {/* Hamburger Icon for Mobile */}
         <button
-          onClick={handleLogout}
-          className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow transition-colors"
+          className="md:hidden flex items-center justify-center p-2 rounded-lg text-green-400 hover:bg-gray-800 focus:outline-none"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-label="Toggle menu"
         >
-          Logout
+          {menuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
+      {/* Mobile Menu Drawer */}
+      {menuOpen && (
+        <div className="md:hidden fixed inset-0 top-16 bg-gray-900 bg-opacity-95 z-50 flex flex-col items-center gap-6 py-8 animate-fade-in">
+          <Link
+            to="/"
+            className={`w-11/12 text-lg font-bold px-4 py-3 rounded-lg text-center transition-colors ${
+              location.pathname === "/"
+                ? "bg-green-500 text-white"
+                : "text-green-400 hover:bg-green-600 hover:text-white"
+            }`}
+            onClick={() => setMenuOpen(false)}
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/tasks"
+            className={`w-11/12 text-lg font-bold px-4 py-3 rounded-lg text-center transition-colors ${
+              location.pathname === "/tasks"
+                ? "bg-emerald-500 text-white"
+                : "text-emerald-400 hover:bg-emerald-600 hover:text-white"
+            }`}
+            onClick={() => setMenuOpen(false)}
+          >
+            My Tasks
+          </Link>
+          <span className="text-gray-300 text-base">{user.email}</span>
+          <button
+            onClick={() => {
+              setMenuOpen(false);
+              handleLogout();
+            }}
+            className="w-11/12 px-4 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow transition-colors"
+          >
+            Logout
+          </button>
+        </div>
+      )}
     </nav>
   );
 }

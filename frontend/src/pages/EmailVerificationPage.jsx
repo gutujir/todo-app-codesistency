@@ -55,7 +55,9 @@ const EmailVerificationPage = () => {
     setResendLoading(true);
     try {
       await resendVerification(user.email);
-      toast.success("Verification email resent");
+      toast.success(
+        "Verification email sent! Please check your inbox and spam folder."
+      );
     } catch (err) {
       toast.error("Failed to resend verification email");
     } finally {
@@ -80,9 +82,18 @@ const EmailVerificationPage = () => {
         <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
           Verify Your Email
         </h2>
-        <p className="text-center text-gray-300 mb-6">
+        <p className="text-center text-gray-300 mb-2">
           Enter the 6-digit code sent to your email address.
         </p>
+        <div className="text-center mb-6">
+          <span className="text-green-400 font-semibold">Check your inbox</span>
+          <span className="text-gray-300">
+            {" "}
+            (and spam folder) for a verification email from{" "}
+            <span className="font-mono text-emerald-300">TodoPro</span>. The
+            code is inside that email.
+          </span>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex justify-between">
