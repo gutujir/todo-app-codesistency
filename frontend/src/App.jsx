@@ -59,9 +59,14 @@ function Navbar() {
       <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3 md:px-8">
         {/* Logo/Brand */}
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-extrabold text-green-400 tracking-tight select-none">
+          <button
+            onClick={() => navigate("/")}
+            className="text-2xl font-extrabold text-green-400 tracking-tight select-none focus:outline-none bg-transparent border-none cursor-pointer"
+            style={{ background: "none", border: "none", padding: 0 }}
+            aria-label="Go to Dashboard"
+          >
             TodoPro
-          </span>
+          </button>
         </div>
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
