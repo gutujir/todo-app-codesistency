@@ -128,18 +128,30 @@ export const resendVerification = async (req, res) => {
     user.verificationToken = verificationToken;
     user.verificationTokenExpiresAt = Date.now() + 24 * 60 * 60 * 1000; // 1 day
     await user.save();
-    await sendEmail({
-      to: user.email,
-      subject: "Verify your email",
-      html: VERIFICATION_EMAIL_TEMPLATE.replace(
-        "{verificationCode}",
-        verificationToken
-      ),
-    });
-    res
-      .status(200)
-      .json({ success: true, message: "Verification email resent" });
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: "Verify your email",
+        html: VERIFICATION_EMAIL_TEMPLATE.replace(
+          "{verificationCode}",
+          verificationToken
+        ),
+      });
+      res
+        .status(200)
+        .json({ success: true, message: "Verification email resent" });
+    } catch (emailError) {
+      console.error("Resend API error:", emailError);
+      res
+        .status(500)
+        .json({
+          success: false,
+          message: "Failed to send verification email",
+          error: emailError.message || emailError,
+        });
+    }
   } catch (error) {
+    console.error("Resend verification controller error:", error);
     res.status(400).json({ success: false, message: error.message });
   }
 };
