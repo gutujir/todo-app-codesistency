@@ -5,6 +5,7 @@ This is the backend API for the TodoPro MERN stack application. It provides auth
 ---
 
 ## Features
+
 - User registration with email verification (Resend API)
 - Secure login/logout with JWT & cookies
 - Password reset via email code
@@ -15,6 +16,7 @@ This is the backend API for the TodoPro MERN stack application. It provides auth
 ---
 
 ## Tech Stack
+
 - Node.js
 - Express 5
 - MongoDB (Mongoose)
@@ -27,12 +29,15 @@ This is the backend API for the TodoPro MERN stack application. It provides auth
 ## Getting Started
 
 ### 1. Install dependencies
+
 ```bash
 npm install
 ```
 
 ### 2. Environment Variables
+
 Create a `.env` file in the backend root:
+
 ```env
 PORT=4000
 MONGO_URI=your_mongodb_connection_string
@@ -42,6 +47,7 @@ CLIENT_URL=http://localhost:5173
 ```
 
 ### 3. Start the server
+
 ```bash
 npm run dev
 ```
@@ -51,6 +57,7 @@ npm run dev
 ## API Endpoints
 
 ### Auth
+
 - `POST /api/auth/signup` – Register new user
 - `POST /api/auth/login` – Login
 - `POST /api/auth/logout` – Logout
@@ -61,6 +68,7 @@ npm run dev
 - `GET /api/auth/check-auth` – Check authentication (protected)
 
 ### Todos
+
 - `GET /api/todo` – Get all todos (protected)
 - `POST /api/todo` – Add todo (protected)
 - `PUT /api/todo/:id` – Update todo (protected)
@@ -69,6 +77,7 @@ npm run dev
 ---
 
 ## Folder Structure
+
 - `controllers/` – Route logic
 - `models/` – Mongoose schemas
 - `routes/` – Express routes
@@ -79,10 +88,12 @@ npm run dev
 ---
 
 ## Deployment
+
 - The backend serves the frontend build in production mode.
 - Set all environment variables in your deployment dashboard.
 
 ---
 
 ## License
+
 MIT
