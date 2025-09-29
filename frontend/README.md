@@ -1,16 +1,79 @@
-# React + Vite
+# Frontend – TodoPro (MERN Todo App)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend for the TodoPro MERN stack application. It provides a modern, responsive UI for authentication, email verification, password reset, and todo management.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- Beautiful, responsive UI (Tailwind CSS)
+- User registration, login, logout
+- Email verification and resend
+- Password reset via code (no reset link)
+- Protected routes (Zustand state management)
+- CRUD for todos (add, edit, delete, mark complete)
+- User feedback with toasts and spinners
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React 19
+- Vite
+- Zustand (state management)
+- Axios (API calls)
+- Tailwind CSS
+- Lucide React Icons
+- React Router DOM
+
+---
+
+## Getting Started
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Environment Variables
+
+Create a `.env` file in the frontend root:
+
+```env
+VITE_API_URL=http://localhost:4000
+```
+
+### 3. Start the dev server
+
+```bash
+npm run dev
+```
+
+---
+
+## Folder Structure
+
+- `src/components/` – Reusable UI components
+- `src/pages/` – App pages (auth, dashboard, todos, etc.)
+- `src/store/` – Zustand store for auth and state
+- `src/utils/` – Utility functions
+
+---
+
+## Environment Variables
+
+- `VITE_API_URL` – Backend API base URL (e.g., http://localhost:4000)
+
+---
+
+## Deployment
+
+- Build for production: `npm run build`
+- The backend will serve the frontend build in production mode.
+
+---
+
+## License
+
+MIT
