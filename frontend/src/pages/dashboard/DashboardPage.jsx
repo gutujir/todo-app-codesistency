@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../../store/authStore";
 import { Link } from "react-router-dom";
-import { formatDate } from "../utils/date";
+import { formatDate } from "../../utils/date";
 
 const DashboardPage = () => {
   const { user, logout } = useAuthStore();
