@@ -3,15 +3,17 @@ import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import FloatingShape from "./components/FloatingShape";
 
-import SignUpPage from "./pages/SignUpPage";
-import LoginPage from "./pages/LoginPage";
-import EmailVerificationPage from "./pages/EmailVerificationPage";
-import DashboardPage from "./pages/DashboardPage";
-import TodoListPage from "./pages/TodoListPage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
-import EnterResetCodePage from "./pages/EnterResetCodePage";
+import SignUpPage from "./pages/auth/SignUpPage";
+import LoginPage from "./pages/auth/LoginPage";
+import EmailVerificationPage from "./pages/auth/EmailVerificationPage";
+import DashboardPage from "./pages/dashboard/DashboardPage";
+import TodoListPage from "./pages/todo/TodoListPage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
+import EnterResetCodePage from "./pages/auth/EnterResetCodePage";
 import LandingPage from "./pages/LandingPage";
+import NotFound from "./pages/NotFound";
+import Home from "./pages/Home";
 
 import LoadingSpinner from "./components/LoadingSpinner";
 
@@ -22,24 +24,17 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 
 // protect routes that require authentication
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
-
+  const { isAuthenticated } = useAuthStore();
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-
-  if (!user.isVerified) {
-    return <Navigate to="/verify-email" replace />;
-  }
-
   return children;
 };
 
 // redirect authenticated users to the home page
 const RedirectAuthenticatedUser = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
-
-  if (isAuthenticated && user.isVerified) {
+  const { isAuthenticated } = useAuthStore();
+  if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }
   return children;
@@ -55,16 +50,19 @@ function Navbar() {
     await logout();
     navigate("/login");
   };
+  const handleLogoClick = () => {
+    navigate("/home");
+  };
   return (
     <nav className="fixed top-0 left-0 w-full bg-gray-900 bg-opacity-90 shadow-lg z-50">
       <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3 md:px-8">
         {/* Logo/Brand */}
         <div className="flex items-center gap-2">
           <button
-            onClick={() => navigate("/")}
+            onClick={handleLogoClick}
             className="text-2xl font-extrabold text-green-400 tracking-tight select-none focus:outline-none bg-transparent border-none cursor-pointer"
             style={{ background: "none", border: "none", padding: 0 }}
-            aria-label="Go to Dashboard"
+            aria-label="Go to Home"
           >
             TodoPro
           </button>
@@ -72,9 +70,9 @@ function Navbar() {
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
           <Link
-            to="/"
+            to="/dashboard"
             className={`text-lg font-bold transition-colors px-2 py-1 rounded-lg ${
-              location.pathname === "/"
+              location.pathname === "/dashboard"
                 ? "bg-green-500 text-white"
                 : "text-green-400 hover:bg-green-600 hover:text-white"
             }`}
@@ -196,15 +194,29 @@ function App() {
           <Route
             path="/"
             element={
-              // Show LandingPage for unauthenticated, Dashboard for authenticated
-              useAuthStore.getState().isAuthenticated &&
-              useAuthStore.getState().user?.isVerified ? (
+              useAuthStore.getState().isAuthenticated ? (
                 <ProtectedRoute>
-                  <DashboardPage />
+                  <Home />
                 </ProtectedRoute>
               ) : (
                 <LandingPage />
               )
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
             }
           />
           <Route
@@ -223,7 +235,7 @@ function App() {
               </RedirectAuthenticatedUser>
             }
           />
-          <Route path="/verify-email" element={<EmailVerificationPage />} />
+          {/* <Route path="/verify-email" element={<EmailVerificationPage />} /> */}
           <Route
             path="/forgot-password"
             element={
@@ -248,7 +260,7 @@ function App() {
               </RedirectAuthenticatedUser>
             }
           />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />
       </div>

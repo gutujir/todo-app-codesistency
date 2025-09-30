@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import AddTodoForm from "../components/AddTodoForm";
-import TodoItem from "../components/TodoItem";
+import AddTodoForm from "../../components/AddTodoForm";
+import TodoItem from "../../components/TodoItem";
 import { motion } from "framer-motion";
 import axios from "axios";
 
