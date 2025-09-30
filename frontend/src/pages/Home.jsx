@@ -46,7 +46,7 @@ const Home = () => (
           My Tasks
         </Link>
         <Link
-          to="/"
+          to="/dashboard"
           className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-lg shadow transition-colors text-lg"
         >
           Dashboard
