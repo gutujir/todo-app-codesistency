@@ -17,13 +17,16 @@ export const getSingleTodo = async (req, res) => {
 
 export const createTodo = async (req, res) => {
   const { title, description } = req.body;
-  if (!title) return res.json({ success: false, message: "Title is required" });
+  if (!title)
+    return res
+      .status(400)
+      .json({ success: false, message: "Title is required" });
   try {
     const todo = new todoModel({ title, description, user: req.userId });
     await todo.save();
-    res.json({ success: true, todo });
+    res.status(201).json({ success: true, todo });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
