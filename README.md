@@ -1,102 +1,175 @@
-# TodoPro – MERN Stack Todo App
+# Todo App
 
-A modern, full-stack Todo application built with the MERN stack (MongoDB, Express, React, Node.js). Features robust authentication, email verification, password reset via code, and a beautiful, responsive UI.
+> **Deployment Notice:**
+>
+> The app is deployed on [Render](https://render.com/).
+> [Deployed App url](https://todo-app-codesistency.onrender.com) > **Resend email sending is limited on the deployed app:** Due to domain verification issues, you can only send emails to your own (verified) email address. For full email features, run locally or verify your domain with Resend.
+
+## About the project
+
+A full-stack Todo application with authentication, email verification, and a modern UI. Built with Node.js/Express (backend) and React (frontend), styled using Tailwind CSS, and featuring Resend for transactional emails.
 
 ---
 
 ## Table of Contents
 
-- [TodoPro – MERN Stack Todo App](#todopro--mern-stack-todo-app)
+- [Todo App](#todo-app)
+  - [About the project](#about-the-project)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
-  - [Tech Stack](#tech-stack)
-  - [Screenshots](#screenshots)
+    - [Backend (Node.js/Express)](#backend-nodejsexpress)
+    - [Frontend (React/Vite)](#frontend-reactvite)
+  - [Project Structure](#project-structure)
   - [Getting Started](#getting-started)
-    - [Backend Setup](#backend-setup)
-    - [Frontend Setup](#frontend-setup)
-  - [Environment Variables](#environment-variables)
-    - [Backend (`backend/.env`)](#backend-backendenv)
-    - [Frontend (`frontend/.env`)](#frontend-frontendenv)
+    - [Prerequisites](#prerequisites)
+  - [Backend Setup](#backend-setup)
+  - [Frontend Setup](#frontend-setup)
+  - [Resend Email Configuration](#resend-email-configuration)
   - [API Endpoints](#api-endpoints)
     - [Auth](#auth)
     - [Todos](#todos)
-  - [Deployment](#deployment)
+  - [Testing](#testing)
   - [License](#license)
   - [Author](#author)
   - [Acknowledgements](#acknowledgements)
 
----
-
 ## Features
 
-- User registration with email verification (Resend API)
-- Secure login/logout with JWT & cookies
-- Password reset via email code (no reset link)
-- Resend verification and reset codes
-- Responsive, modern UI (React, Tailwind CSS)
-- Protected routes and state management (Zustand)
-- CRUD for todos (add, edit, delete, mark complete)
-- Professional error handling and user feedback
+### Backend (Node.js/Express)
 
-## Tech Stack
+- User authentication (signup, login, logout, JWT cookies)
+- Email verification and password reset (Resend integration)
+- Todo CRUD (create, edit, complete, delete, list)
+- Secure route protection (JWT middleware)
+- Professional test suite (Jest, Supertest, mongodb-memory-server)
 
-- **Frontend:** React 19, Vite, Zustand, Axios, Tailwind CSS, Lucide React Icons
-- **Backend:** Node.js, Express 5, MongoDB (Mongoose), JWT, Resend (email)
-- **Other:** Render.com (deployment), dotenv, CORS, cookie-parser
+### Frontend (React/Vite)
 
-## Screenshots
+- User signup, login, and dashboard
+- Todo creation, editing, completion, and deletion
+- Public landing page and protected dashboard
+- Responsive, modern UI (Tailwind CSS)
 
-![App Screenshot](frontend/public/screenshot-for-readme.png)
+---
+
+## Project Structure
+
+```
+todo-app-codesistency/
+├── backend/
+│   ├── src/
+│   │   ├── app.js
+│   │   ├── index.js
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── resend/
+│   │   ├── routes/
+│   │   └── utils/
+│   ├── tests/
+│   ├── package.json
+│   ├── jest.config.js
+│   └── .env
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   ├── vite.config.js
+│   └── .env
+└── README.md
+```
 
 ---
 
 ## Getting Started
 
-### Backend Setup
+### Prerequisites
 
-1. `cd backend`
-2. Install dependencies:
-   ```bash
+- Node.js (v16+ recommended)
+- npm or yarn
+- MongoDB (local or Atlas, or use in-memory for tests)
+
+---
+
+## Backend Setup
+
+1. **Clone the repository:**
+
+   ```sh
+   git clone https://github.com/gutujir/todo-app-codesistency.git
+   cd todo-app-codesistency/backend
+   ```
+
+2. **Install dependencies:**
+
+   ```sh
    npm install
    ```
-3. Create a `.env` file (see [Environment Variables](#environment-variables))
-4. Start the server (dev):
-   ```bash
+
+3. **Configure environment variables:**
+   Create a `.env` file in the `backend/` directory:
+
+   ```env
+   PORT=5000
+   MONGO_URI=your mongodb connection string
+   JWT_SECRET=your_jwt_secret
+   CLIENT_URL=http://localhost:5173
+   RESEND_API_KEY=your_resend_api_key
+   ```
+
+   - `RESEND_API_KEY`: Get from https://resend.com/
+
+4. **Run the backend server:**
+
+   ```sh
    npm run dev
    ```
 
-### Frontend Setup
+   The server will start on `http://localhost:5000` by default.
 
-1. `cd frontend`
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file (see [Environment Variables](#environment-variables))
-4. Start the dev server:
-   ```bash
-   npm run dev
+5. **Run backend tests:**
+   ```sh
+   npm test
    ```
 
 ---
 
-## Environment Variables
+## Frontend Setup
 
-### Backend (`backend/.env`)
+1. **Navigate to the frontend directory:**
 
-```
-PORT=4000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-RESEND_API_KEY=your_resend_api_key
-CLIENT_URL=http://localhost:5173
-```
+   ```sh
+   cd ../frontend
+   ```
 
-### Frontend (`frontend/.env`)
+2. **Install dependencies:**
 
-```
-VITE_API_URL=http://localhost:4000
-```
+   ```sh
+   npm install
+   ```
+
+3. **Configure environment variables:**
+   Create a `.env` file in the `frontend/` directory:
+
+   ```env
+   VITE_API_URL=http://localhost:5000
+   ```
+
+4. **Run the frontend app:**
+   ```sh
+   npm run dev
+   ```
+   The app will be available at `http://localhost:5173`.
+
+---
+
+## Resend Email Configuration
+
+- **Sign up at [Resend](https://resend.com/)** and obtain your API key.
+- **Add your sender email** in the Resend dashboard and verify it.
+- \*\*Set `RESEND_API_KEY` in your backend `.env`.
+- **Note:** On the deployed app (Render), Resend email sending is restricted due to domain verification issues. You can only send emails to your own (verified) email address. For full email functionality, use the app locally or ensure your domain is verified with Resend.
 
 ---
 
@@ -104,30 +177,29 @@ VITE_API_URL=http://localhost:4000
 
 ### Auth
 
-- `POST /api/auth/signup` – Register new user
-- `POST /api/auth/login` – Login
-- `POST /api/auth/logout` – Logout
-- `POST /api/auth/verify-email` – Verify email with code
-- `POST /api/auth/resend-verification` – Resend verification code
-- `POST /api/auth/forgot-password` – Request password reset code
-- `POST /api/auth/reset-password-by-code` – Reset password with code
-- `GET /api/auth/check-auth` – Check authentication (protected)
+- `POST /api/auth/signup` — Register new user
+- `POST /api/auth/login` — Login
+- `POST /api/auth/verify-email` — Verify email with code
+- `POST /api/auth/resend-verification` — Resend verification email
+- `POST /api/auth/forgot-password` — Request password reset
+- `POST /api/auth/reset-password-by-code` — Reset password
+- `POST /api/auth/logout` — Logout
+- `GET /api/auth/check-auth` — Check authentication
 
 ### Todos
 
-- `GET /api/todo` – Get all todos (protected)
-- `POST /api/todo` – Add todo (protected)
-- `PUT /api/todo/:id` – Update todo (protected)
-- `DELETE /api/todo/:id` – Delete todo (protected)
+- `GET /api/todos` — List all todos (auth required)
+- `POST /api/todos` — Create todo (auth required)
+- `PATCH /api/todos/:id` — Edit todo (auth required)
+- `PATCH /api/todos/:id/complete` — Mark todo as complete (auth required)
+- `DELETE /api/todos/:id` — Delete todo (auth required)
 
 ---
 
-## Deployment
+## Testing
 
-- The app is ready for deployment on platforms like Render.com.
-- Build frontend: `cd frontend && npm run build`
-- The backend serves the frontend build in production mode.
-- Set all environment variables in your deployment dashboard.
+- Backend: `npm test` (Jest, Supertest, in-memory MongoDB)
+- Utilities, models, controllers, routes, and middleware are all covered.
 
 ---
 
@@ -139,15 +211,15 @@ This project is licensed under the MIT License.
 
 ## Author
 
-- [Gutu Jirata Imana](https://github.com/gutujir)
+- [Gutu Jirata Imana]
+- [Portfolio](https://gutu-portfolio-2.vercel.app/)
 
 ---
 
 ## Acknowledgements
 
 - [Resend](https://resend.com/) for transactional email
-- [MongoDB](https://www.mongodb.com/), [Render](https://render.com/), [Vite](https://vitejs.dev/)
-
----
-
-> For any questions or issues, please open an issue or contact the maintainer.
+- [MongoDB](https://www.mongodb.com/), [Mongoose](https://mongoosejs.com/)
+- [Express](https://expressjs.com/), [React](https://react.dev/), [Vite](https://vitejs.dev/)
+- [Jest](https://jestjs.io/), [Supertest](https://github.com/ladjs/supertest)
+- [Tailwind CSS](https://tailwindcss.com/)
