@@ -3,7 +3,7 @@
 > **Deployment Notice:**
 >
 > The app is deployed on [Render](https://render.com/).
-> [Deployed App url](https://todo-app-codesistency.onrender.com) > **Resend email sending is limited on the deployed app:** Due to domain verification issues, you can only send emails to your own (verified) email address. For full email features, run locally or verify your domain with Resend.
+> To check the deployed app visit [https://todo-app-codesistency.onrender.com](https://todo-app-codesistency.onrender.com) > **Resend email sending is limited on the deployed app:** Due to domain verification issues, you can only send emails to your own (verified) email address. For full email features, run locally or verify your domain with Resend.
 
 ## About the project
 
