@@ -2,6 +2,7 @@
 
 > **Notice:**
 > The app is deployed on [Render](https://render.com/).
+> <<<<<<< HEAD
 > [Deployed App url](https://todo-app-codesistency.onrender.com)
 >
 > Email verification functionality is handled on the backend for account verification and password reset processes. However, due to domain-related issues, these features may not function correctly on the deployed app. For testing purposes, you can configure the Resend email service locally to ensure the functionality works as expected.
