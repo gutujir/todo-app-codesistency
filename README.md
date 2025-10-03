@@ -1,9 +1,10 @@
 # Todo App
 
-> **Deployment Notice:**
->
+> **Notice:**
 > The app is deployed on [Render](https://render.com/).
-> [Deployed App url](https://todo-app-codesistency.onrender.com) > **Resend email sending is limited on the deployed app:** Due to domain verification issues, you can only send emails to your own (verified) email address. For full email features, run locally or verify your domain with Resend.
+> [Deployed App url](https://todo-app-codesistency.onrender.com)
+>
+> Email verification functionality is handled on the backend for account verification and password reset processes. However, due to domain-related issues, these features may not function correctly on the deployed app. For testing purposes, you can configure the Resend email service locally to ensure the functionality works as expected.
 
 ## About the project
 
